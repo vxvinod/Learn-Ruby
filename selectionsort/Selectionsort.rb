@@ -3,7 +3,14 @@ class Selectionsort
 $arr=Array.new
 
 		def getinput
-			$arr=[8,4,6,3,1,2]
+				puts "Enter the element to be sorted"
+				$a=gets.chomp()
+				while ($a != '/') do
+				puts "To end press /"
+				$arr.push($a.to_i)
+				puts "#{$arr} is added to array"
+				$a=gets.chomp()
+				end
 		end
 
 		def selectionsort

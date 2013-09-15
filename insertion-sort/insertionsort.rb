@@ -10,7 +10,7 @@ $arr=Array.new
 		$a=gets.chomp()
 		while ($a != '/') do
 		puts "To end press /"
-		$arr.push($a)
+		$arr.push($a.to_i)
 		puts "#{$arr} is added to array"
 		$a=gets.chomp()
 		end
