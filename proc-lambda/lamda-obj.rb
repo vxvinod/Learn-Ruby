@@ -1,6 +1,6 @@
 class Lambdaobj
 
-def initialize
+
 
 addition = lambda{|a,b| return a + b }
 
