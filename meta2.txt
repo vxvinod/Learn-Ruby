@@ -1,0 +1,33 @@
+
+
+convert sting to symbol use String#to_sym()
+convert symbol to string use String+to_s()
+
+PATTERN DISPATCHER
+*filetering methods based on their names in class is called pattern dispatching.
+
+Note:
+*Send() can call any method including private method but it breaks the encapsulation and new method public_send() which respects the receiver privacy.
+
+*obj.send(:method_name,arg1) --method name can be strings or symbols,symbols will be considered //ruby is sending name of method to object
+
+Difference Between String and Symmbol
+*Symbols are immutable ,we can change characters inside the string but we cant do in symbols	
+*comparison is faster in symbols than string
+
+Advantage:
+using send we can wait until last minute to pass the method name in to send function so that particular method will be called at run time while
+code is running is called Dynamic Dispatch
+
+How to use Define method ?
+we can define method dynamically using define_method
+when define method is executed it creates method hello at run time it is called Dynamic method
+class Dynmethod
+
+	define_method :hello do |x,y|
+		"hello #{x} and #{y}"
+	end
+end
+
+dyn=Dynmethod.new
+puts dyn.hello("vinod","sabari")
