@@ -1,4 +1,4 @@
-class DataSource
+class DataSource  #DataSource where it stores the information about resources and project of every domain
 
  def get_ruby_resource(location_id)
  	"23"
@@ -32,29 +32,23 @@ class RefDomain
 	def initialize(location_id,data_source)
 		@id=location_id
 		@ds=data_source
-		@ds.methods.grep(/^get_(.*)_projects$/){ RefDomain.define_component $1 }
+		@ds.methods.grep(/^get_(.*)_projects$/){ RefDomain.define_domain $1 }  #here grep filets the methods to matches the particular pattern and stores in $1
 	end
 
-	def self.define_component(name)
-		puts name
-		puts @id
-		@ds.methods.grep(/^get_(.*)_projects$/){puts $1}
-		puts "inside self"
-		define_method (name){
-		resource=@ds.send "get_#{name}_resource",@id
+	def self.define_domain(name)
+		define_method (name) do   #dynamically method is created
+		resource=@ds.send "get_#{name}_resource",@id  
 		projects=@ds.send "get_#{name}_projects",@id
-		#resource=@ds.send get_php_resource,@id
-		#projects=@ds.get_php_projects(@id)
-		puts resource
-		puts "res"
-		conclusion="#{name.to_s.upcase!}:#{resources} resources and #{projects}"
-		#return "enough #{conclusion}" if resource >30
-		 puts conclusion
-	}
+		conclusion="#{name.to_s.upcase!}:#{resource} resources and #{projects}"
+		return "enough #{conclusion}" if resource.to_i >30
+		conclusion
+		end
 	end
-	#define_domain :php
+	
 end
 d=RefDomain.new(2,DataSource.new)
-
+puts d.ruby # > RUBY:23 resources and Clear trip,Twitter,Github
+puts d.java # > enough JAVA:50 resources and flipkart,google+
+puts d.php # > enough PHP:43 resources and facebook,orkut
 
 

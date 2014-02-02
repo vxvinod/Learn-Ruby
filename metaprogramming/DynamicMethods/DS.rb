@@ -105,6 +105,6 @@ class RefDomain
 	#define_domain :php
 end
 d=RefDomain.new(2,DataSource.new)
-
+d.ruby
 
 
