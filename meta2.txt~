@@ -43,7 +43,7 @@ method_missing()
 class Hunter
 	def method_missing(method_name,*args)
  	  puts "method name #{method_name} is called with arguments (#{args.join(',')})"
- 	  puts block_given?
+ 	  puts "block is presend" if block_given?
 	end
 end
 
@@ -53,6 +53,11 @@ puts "this is block"
 end
 
 GHOST METHODS
+*call to methods that really doesnt exist ,method_missing() perfroms the action this are called ghost methods
 "if they ask you something and you dont understand do this"
 method that is processed by method_missing() seems regular call from callers side but there is no corresponding method on receiver side this is called Ghost method.
+*ghost methods are rows_wtih_country()
 
+*open structs is magicof ghost methods if you want a new hash just assign the object with value ,
+*= calls missing method and binds the value with attribute and returns as hash
+*object that catches ghost method and forward them to another object with wrapping some login around the call is called Dynamic proxy.
