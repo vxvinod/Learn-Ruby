@@ -60,4 +60,13 @@ method that is processed by method_missing() seems regular call from callers sid
 
 *open structs is magicof ghost methods if you want a new hash just assign the object with value ,
 *= calls missing method and binds the value with attribute and returns as hash
+
+Dynamic Proxy
+
 *object that catches ghost method and forward them to another object with wrapping some login around the call is called Dynamic proxy.
+
+OVERRIDDING RESPOND_TO
+*
+
+BLANK STATE
+Ruby allows you to remove functionality from a class. This technique can be useful to ensure that your class doesn’t expose unwanted or unexpected features.

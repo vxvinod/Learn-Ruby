@@ -67,3 +67,20 @@ Dynamic Proxy
 
 OVERRIDDING RESPOND_TO
 *
+
+BLANK STATE
+when you try to call a ghost method but instead there is already method defined in same name in ancestor then there occurs clash.
+Ruby allows you to remove functionality from a class. This technique can be useful to ensure that your class doesn’t expose unwanted or unexpected features.
+methods can b e removed using two ways
+*undef_method which removes methods included inherited ones.
+*remove_method which removes the method from receiver leaves the inherited ones.
+
+class ExpBlankState
+		instance_methods.each do |method_name|
+			undef_method(method_name) unless method_name =~ /^__|^(public_methods|method_missing|respond_to\?)$/
+		end
+end
+puts ExpBlankState.new.public_methods
+
+
+
