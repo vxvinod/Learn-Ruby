@@ -32,7 +32,6 @@ class RefDomain
 	def initialize(location_id,data_source)
 		@id=location_id
 		@ds=data_source
-		#@ds.methods.grep(/^get_(.*)_projects$/){ RefDomain.define_domain $1 }  #here grep filets the methods to matches the particular pattern and stores in $1
 	end
 
 	def method_missing(name)
@@ -49,7 +48,7 @@ d=RefDomain.new(2,DataSource.new)
 puts d.ruby # > RUBY:23 resources and Clear trip,Twitter,Github
 puts d.java # > enough JAVA:50 resources and flipkart,google+
 puts d.php # > enough PHP:43 resources and facebook,orkut
-puts d.net
+puts d.net # > no Method error
 
 
  
