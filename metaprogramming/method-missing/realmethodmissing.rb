@@ -13,7 +13,6 @@ class Hollywood
 		@@i+=1
 		return praise($1.to_sym,*args) if name.to_s =~ /king_o_(.*)/
 		puts $1
-		puts name.to_s
 		puts name.to_s =~ /king_o_(.*)/
 		puts "what the hell man"
 	end
