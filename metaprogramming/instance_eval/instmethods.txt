@@ -1,0 +1,50 @@
+*class_eval created instance method .
+*instance_eval creates class methods
+* class_eval will be method of Module class ,so the receiver of block will be module or class.
+*instance_eval will be method of object class,so the receiver of block will be object 
+
+*instance_exec() is similar to instance_eval(),it allows to pass arguments.
+
+class My8inBhk
+
+	def initialize
+		@v1 = 99
+	end
+
+	private
+	def am_i_mad
+		@percent =100 
+		puts "you are #{@percent} mad"		
+		@percent
+	end
+end
+
+k = My8inBhk.new
+k.instance_eval do 	
+	puts @v1
+	if am_i_mad > 100
+		puts "deadly"
+	else
+		puts "funny"
+	end
+
+	def cool
+		puts "you are cool"
+	end
+
+end
+k.cool
+k.instance_exec(10) do |x|
+puts x*@v1 # 990
+end
+
+PROC - a proc is a block which turns in to object.
+
+
+
+PROC
+
+
+
+
+
