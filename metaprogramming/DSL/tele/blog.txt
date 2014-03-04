@@ -1,0 +1,188 @@
+DSL:
+
+Domain specific language is computer language in particular application domain.
+take an example a telecommunication client needs a DSL so that if customer fails to pay his bills before the due date then connection should get terminated and automated message should be sent to the customer.
+
+In order to implement this we need to write a DSL so that the events(below) should be checked.
+
+event "check amount paid" do
+	Alert if amount_notpaid and crossed due date
+end
+
+Explanation:
+above event checks whether customer paid the amount or not ,the condition is passed in block ,here if customer has not paid his amount and crossed his due date then connection will be terminated and alert will be sent to customer.
+
+In order to implement the complete module we are going to create a DSL file named as main.rb here we are going to load the event and based on that event will get executed and customer connection will be continued or disconnected.
+
+[code lanugage ='ruby']
+#file name -main.rb
+def event (name)
+Alert "Customer connection terminated" if yield
+end
+
+Dir.glob('*events.rb').each do |file|
+	load file
+end
+
+[/code]
+
+[code language = 'ruby']
+#file name- test_events.rb
+events "customer has paid" do
+false
+end
+
+events "customer has not paid" do
+true
+end
+
+[/code]
+
+Explanation:
+* Main DSL is defined in main.rb where event method is defined.
+* from main.rb all events file is loaded using load file.
+* the event block is called using yield method in main.rb and alert is displayed if block return true , else return false.
+
+
+But now a blow to our jaw is we need to access the customer information across the events so we need to setup the amount and due date and used in the events .hence we need to write a DSL which loads the setting up the data to validate customer.
+
+
+In order to acheive this we have a plan to implement that is collect all events which will have name and block and store these events in hash.
+here we are converting blocks in to proc(object) and stores inside hash.
+[code language ='ruby']
+def event (name,&block)
+	@events[name]=block
+end
+[/code] 
+
+next is collect all setup and store it in to array,same here we are converting a block in to proc and store it in to array.
+[code language ='ruby']
+def setup(&block)
+	@setup<<block
+end
+[/code] 
+
+test events
+[code language ='ruby']
+
+event "customer does not have money" do
+	@cust_money < @amount_to_be_paid && @date >2000
+end
+
+event "Customer has money but he is not paying !!!:(" do
+	@cust_money > @amount_to_be_paid && @date >2000
+end
+
+setup do
+	puts "setting due date"
+	@date = 2302 
+end
+
+setup do
+	puts "setting up due"
+	@amount_to_be_paid = 1200
+end
+
+setup do
+	puts "customer have money"
+	@cust_money = 1000
+end
+[/code]
+
+main DSL
+[code language = 'ruby']
+
+def event(name,&block) 
+	@events[name] = block
+end
+
+def setup(&block) 
+	@setup << block
+end
+
+Dir.glob('*events.rb').each do |file|
+	@events={}
+	@setup=[]
+	load file
+	@events.each_pair do |name,event|
+		env = Object.new
+		@setup.each do |setup|
+			env.instance_eval &setup
+		end
+		puts "Alert:#{name}" if env.instance_eval &event
+	end
+end
+
+
+
+#setting due date
+#setting up due
+#customer have money
+#Alert:customer does not have money
+#setting due date
+#setting up due
+#customer have money
+
+[/code]
+
+Explanation:
+* main.js file loads the event file.
+* for each event file it initialises @events and @setup.
+* code in the file calls event() and setup() method and stores the events in hash and setup in array.
+*for each events an instance of Object is intantiated and setup is loaded using 
+	env.instance_eval &setup
+	here whenever a block is passed in to instance_eval the block gets executed. so here all the customer details is set.
+*and then event gets executed using
+	env.instance_eval &event 
+	based on it alert is triggered to customer.
+
+
+here events and setup are global variables  in order to overcome this we are defining Kernel methods in that shares local variable events and setups in main.js.
+
+[code language='ruby']
+lambda{
+	setups =[]
+	events={}
+
+Kernel.send :define_method, :event do |name,&block|
+	events[name] = block
+end
+
+Kernel.send :define_method, :setup do |&block|
+	setups << block
+end
+
+Kernel.send :define_method,:each_events do |&block|
+	events.each_pair do |name,event|
+		block.call name,event
+	end
+end
+
+Kernel.send :define_method,:each_setup do |&block|
+	setups.each do |setup|
+		block.call setup
+	end
+end
+}.call
+
+Dir.glob('*events.rb').each do |file|
+	load file
+	each_events do |name,event|
+		env = Object.new
+		each_setup do |setup|
+			env.instance_eval &setup
+		end
+		puts "Alert:#{name}" if env.instance_eval &event
+	end
+end
+
+#setting due date
+#setting up due
+#customer have money
+#Alert:customer does not have money
+#setting due date
+#setting up due
+#customer have money
+
+[/code]
+
