@@ -1,0 +1,134 @@
+Callable objects
+
+Great day today here is some notes i have taken while reading callable objects in metaprogramming.
+here we go.
+Proc- block turned in to object
+you want to strore a block and execute it later for that we need object .
+passing a block to Proc.new  and assign it to variable.
+[code language='ruby'] 
+grt = Proc.new {|x| x*x}
+grt.call(2)
+[/code]
+&operators:
+in most cases block we passed will be executed in same  method using yield keyword, there are two ways where we cannot use yield
+ *want to pass block in to another method
+ *convert block in to proc
+ in order to execute the block later we need to store it in a name with last argument prefixed by &.
+
+[code language='ruby'] 
+ def multiple_money(x,y,&block)
+	puts "calling dollars"
+	dollars(x,y,&block)
+	yield(x,y)
+end
+
+def dollars(a,b)
+	puts yield(a,b)
+end
+
+multiple_money(2,4) {|a,b| a*b}
+[/code]
+
+Convert block to Proc:
+a proc can be converted in to object by below sample
+
+[code language='ruby'] 
+def proc_to_object(a,b,&my_proc)
+puts "converting procs to object"
+my_proc.call(a,b)
+end
+
+puts proc_to_object(2,3){|a,b| a*b}
+[/code]
+
+proc is converted to object and it can be called by call method.
+
+Convert  Proc to block
+[code language='ruby'] 
+def object_to_proc(a,b)
+	puts "converting object to procs"
+	yield(a,b)
+end
+
+our_proc = Proc.new{|a,b| a*b }
+puts object_to_proc(2,3,&our_proc)
+[/code]
+Lambdas: proc created using lambda() are called lambdas
+
+Difference between Lambda and proc is 
+*return keyword
+*checking of arguments
+
+RETURN DIFFERENCE
+in lambda if we specify return ,it will just return from the lambda and executes the next statement.
+[code language='ruby'] 
+def return_lambda(lamb)
+	puts "checking lambda return"
+	lamb.call * 2
+end
+
+lam = lambda {return 20} # return from lambda
+puts return_lambda(lam) # this is executed
+
+but in proc if we specify return ,it will return from top level scope ,the program fails.
+
+def return_proc(retproc)
+	puts "checking proc return"
+	retproc.call * 2
+end
+
+
+pro = Proc.new{ return 20} #returns from top level scope
+puts return_proc(pro)  #unreachable code
+[/code]
+
+CHECKING OF ARGUMENTS:
+
+lamdbda: when it is called with wrong number of arguments it throws an exception,
+Proc: when it is called with wrong number of arguments,it still executes by neglecting the extra arguments.
+[code language='ruby'] 
+pro = Proc.new {|x,y| x*y}
+pro.call(1) =>[1,nil]
+pro.call(1,2,3) =>[1,2]
+pro.call() =>[nil,nil]
+[/code]
+
+Example :
+[code language='ruby'] 
+def return_lambda(lamb)
+	puts "checking lambda return"
+	lamb.call(1,2) * 2
+end
+
+lam = lambda {|a| a} # return from lambda
+puts return_lambda(lam) # throws wrong arguments exception
+
+def return_proc(retproc)
+	puts "checking proc return"
+	retproc.call(1,2) * 2
+end
+
+pro = Proc.new{ |a| a} #returns from top level scope
+puts return_proc(pro)  #executes by taking i alone
+[/code]
+
+METHODS
+
+we can get method itself in to method object and call it whenver necessary
+
+NOTE:
+the only difference is lamdba is executed in the scope where it is defined (its a closure).
+where as method is evaluated in the scope of its object.
+[code language='ruby'] 
+class MyClass
+	def initialize(value)
+		@x = value
+	end
+	def my_method
+		@x
+	end
+end
+[/code]
+object = MyClass.new(1)
+m = object.method :my_method
+m.call

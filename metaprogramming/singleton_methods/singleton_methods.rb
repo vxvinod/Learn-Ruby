@@ -8,9 +8,10 @@ class Myclass
 	def self.end
 		puts "hello"
 	end
-	puts self.singleton_methods
-	puts @str.singleton_methods
+	puts Myclass.singleton_methods #->end
+	puts @str.singleton_methods #->check
+	puts self.singleton_methods #->end
 end
 
 cl = Myclass.new
-Myclass.end
+Myclass.end #=> hello
