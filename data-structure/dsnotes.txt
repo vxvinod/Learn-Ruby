@@ -1,0 +1,27 @@
+TREE collection
+
+Ruby doesn't have nor need pointers since most things are simply passed by reference.
+
+> a = "hello"
+> b = a
+> a.object_id == b.object_id
+=> true 
+In its simplest form a tree node could just be a struct, with a parent and a left and right sibling:
+
+> Node = Struct.new(:parent, :left, :right)
+> root = Node.new
+> n1   = Node.new(root, "hello", "world")
+> root.left = n1
+...
+
+> root.left.left
+=> "hello"
+> root.left.right
+=> "world"
+For more complete implementations you could look at for example:
+
+RubyTree:
+http://rubytree.rubyforge.org/rdoc/
+
+SimpleTree:
+https://github.com/ealdent/simple-tree/blob/master/lib/simple_tree.rb

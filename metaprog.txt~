@@ -1,0 +1,31 @@
+notes
+
+* to get the methods starting with pattern
+	[].methods.grep /^re/ #=>[:replace,:reject,..]rr
+*disacv of open class- overwrite existing methods
+ -reckless patching of classes is monkey patching 	 
+*obj object contains instance variables and reference to the class
+*from class it s instance method and from object it is method
+*object instance variable live in object itself
+	and object methods live in object itself
+*all classes inherit from Object
+*class inherits from Module and it inherits from Object
+
+*modules are used where it to be included somewhere(used as namespace).
+*class is used when it is to be instantiated and inherited.
+*Modules XXX which only exists in container of constants is called Namespace.
+*load(filename) -constants will not be loaded as a result it will pollute the program with its own contants
+	*load(filename,true) -ruby creates anonymous module as namespace and stores the constants
+*load()-to execute code
+*require()-to import librarbies
+
+*object --bunch of instance variable and reference to the class
+*class--its an object with list of instance methdods and link to superclass.
+
+Execute Method
+*two process--method lookup and execute ut needs self
+*my_string.reverse() -- my_string is receiver
+*class->superclass Object->Basic Object---path of traversing is called ancesstor chaining
+
+MySubclass.ancestors # => [MySubclass, MyClass, Object, Kernel, BasicObject]
+*when you include module in a class,ruby will create anonymous class that wraps up module and inserts in to ancestors chain

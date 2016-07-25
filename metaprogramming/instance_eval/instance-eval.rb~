@@ -1,0 +1,10 @@
+class My8inBhk
+
+	def initialize
+	   @v1 = 99
+	end
+end
+
+k = My8inBhk.new
+k.instance_eval {@v1}
+

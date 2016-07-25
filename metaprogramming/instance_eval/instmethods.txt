@@ -1,0 +1,98 @@
+ instance_eval name is different and i am not able to predict the working of it so we will dive it in to pool and dicuss it.
+ instance_eval is used to define class methods,here instance_eval is used to create a class method for the particular object instance,i am damn sure you wont be able to come up with me ,so its better to swim in to example.
+
+[code language = 'ruby']
+class Heaven
+	private
+	def happy
+		"i am happy"
+	end
+end
+
+h,g = Heaven.new
+h.instance_eval do
+	puts happy # i am happy
+	def sad
+		"i am sad"
+	end
+end
+
+puts h.sad #i am sad
+puts g.sad # undefined methiod sad
+[/code]
+
+Explanation:
+here 'h' and 'g' is instance of class Heaven and using instance_eval 'sad' method is defined in to the object 'h'.
+and the point to be noted is only 'h' can access sad method 'g' cannot access because 'sad' method is defined inside the 'h' instance,to be clear when 'h' instance is created a prototype copy of class heaven is allocated in memory and when 'g' instance is created another prototype copy of class heaven is allocated in memory.when instance_eval is called by 'h' object and 'sad' method gets added in to prototype of 'h' and which is not accessed by 'g' object.
+
+Note:
+inside instance_eval block it can access private variable and private methods ,it violates encapsulation.
+
+
+More in instance_eval
+*we can compute the method inside instance_eval block and perform necessary actions.
+* using instance_exec() we can pass the argument in to block which cannot be done in instance_eval
+*instance_eval will be method of object class,so the receiver of block will be object 
+
+[code language = 'ruby']
+class My8inBhk
+	def initialize
+		@v1 = 99
+	end
+
+	private
+	def am_i_mad
+		@percent =100 
+		puts "you are #{@percent} mad"		
+		@percent
+	end
+end
+
+k = My8inBhk.new
+k.instance_eval do 	
+	puts @v1
+	if am_i_mad > 100
+		puts "deadly"
+	else
+		puts "funny"
+	end
+
+	def cool
+		puts "you are cool"
+	end
+
+end
+k.cool
+k.instance_exec(10) do |x|
+puts x*@v1 # 990  #using instance_exec we pass 10 in to block
+end
+
+[/code]
+
+Explanation :
+* Above we are computing the method "am_i_mad" and performing necessary actions.
+* using instance_exec we are passing 10 in to block and printing the multiple with x.
+
+
+happy day we will discuss more in proc,lambdas ,block :)
+
+*class_eval created instance method.
+*instance_eval creates class methods
+* class_eval will be method of Module class ,so the receiver of block will be module or class.
+
+
+*instance_exec() is similar to instance_eval(),it allows to pass arguments.
+
+
+PROC - a proc is a block which turns in to object.
+
+
+
+Callable objects
+
+Proc - a block turned in to object.
+
+
+
+
+

@@ -1,0 +1,44 @@
+Scope
+
+when you define a block it carries the binding which is present at that moment.it carries those bindings along when block is passed in to method.
+
+v1 = 1
+class MyClass
+v2 = 2
+local_variables
+# => [:v2]
+def my_method
+v3 = 3
+local_variables
+end
+local_variables
+end
+obj = MyClass.new
+obj.my_method
+obj.my_method
+local_variables
+# => [:v2]
+# => [:v3]
+# => [:v3]
+# => [:v1, :obj]
+
+
+two times method is called then the scope goes out and variablesa re newly defined
+
+
+Scope gates 
+*class def
+*module def
+*methods
+
+Closure
+a closure is an function/method which has 2 properties
+*you can pass it around like an object.
+*remembers all the values of all variables that wer in scope when function was created,able to access those variables when it is even no longer in scope.
+
+
+    The closure will create a copy of all the variables that it needs when it is defined. The copies of the variables will therefore come along for the ride as the closure gets passed around.
+    The closure will actually extend the lifetime of all the variables that it needs. It will not copy them, but will retain a reference to them and the variables themselves will not be eligible for garbage collection (if the language has garbage collection) while the closure is around.
+
+
+
